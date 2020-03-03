@@ -19,7 +19,8 @@ public class Frame {
 
   public Frame(KMethod method, Thread thread) {
     this.method = method;
-    this.localVars = new LocalVars(method.maxLocals);
+    //非静态方法的第一个凸是this. 所以计算的时候要自动+1.
+    this.localVars = new LocalVars(method.isStatic()?method.maxLocals:method.maxLocals+1);
     this.operandStack = new OperandStack(method.maxStacks);
     this.thread = thread;
     this.instructionMap = method.instructionMap;

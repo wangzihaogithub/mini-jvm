@@ -41,7 +41,7 @@ public abstract class BaseInterpreterTest {
       String userDir = System.getProperty("user.dir");
       if (userDir.endsWith("jvm-core")) {
         int idx = userDir.lastIndexOf(EnvHolder.FILE_SEPARATOR);
-        miniJvmHome = userDir.substring(0, idx);
+        miniJvmHome = idx == -1? userDir : userDir.substring(0, idx);
       } else if (userDir.endsWith("mini-jvm")) {
         miniJvmHome = userDir;
       }
@@ -52,7 +52,10 @@ public abstract class BaseInterpreterTest {
 
     Path exampleJarPath= Paths.get(miniJvmHome, "example", "target", "example.jar");
     if (!exampleJarPath.toFile().exists()) {
-      throw new IllegalStateException("example.jar not found");
+      exampleJarPath= Paths.get(miniJvmHome, "..","example", "target", "example.jar");
+      if (!exampleJarPath.toFile().exists()) {
+        throw new IllegalStateException("example.jar not found");
+      }
     }
 
     String classpath = Utils.classpath(exampleJarPath.toFile().getAbsolutePath());

@@ -121,6 +121,9 @@ public class VirtualMachine {
     KClass fdCls = classLoader.loadClass("java/io/FileDescriptor");
     KObject outFdObj = fdCls.newObject();
     KMethod fdInitMethod = fdCls.getMethod("<init>", "(I)V");
+    if(fdInitMethod == null){
+      fdInitMethod = fdCls.getMethod("<init>", "()V");
+    }
     Thread t1 = new Thread(1024);
     Frame f1 = new Frame(fdInitMethod, t1);
     f1.setRef(0, outFdObj);

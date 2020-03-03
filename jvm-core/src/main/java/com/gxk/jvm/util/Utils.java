@@ -273,7 +273,8 @@ public abstract class Utils {
       String userDir = System.getProperty("user.dir");
       if (userDir.endsWith("jvm-core")) {
         int idx = userDir.lastIndexOf(EnvHolder.FILE_SEPARATOR);
-        miniJvmHome = userDir.substring(0, idx);
+        //window 没有最后一位,substring(-1)会报错
+        miniJvmHome = idx == -1? userDir : userDir.substring(0, idx);
       } else if (userDir.endsWith("mini-jvm")) {
         miniJvmHome = userDir;
       }
@@ -287,7 +288,11 @@ public abstract class Utils {
             + EnvHolder.FILE_SEPARATOR + "rt.jar";
 
     if (!new File(rtJarPath).exists()) {
-      throw new IllegalStateException("rt.jar not found");
+      rtJarPath = miniJvmHome +EnvHolder.FILE_SEPARATOR+".."+ EnvHolder.FILE_SEPARATOR + "mini-jdk" + EnvHolder.FILE_SEPARATOR + "target"
+                      + EnvHolder.FILE_SEPARATOR + "rt.jar";
+      if (!new File(rtJarPath).exists()) {
+        throw new IllegalStateException("rt.jar not found");
+      }
     }
 
     String cp = classpath + EnvHolder.PATH_SEPARATOR

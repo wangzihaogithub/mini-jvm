@@ -13,7 +13,8 @@ public abstract class EnvHolder {
   public static boolean debug;
 
   static {
-//    init();
+      //我是window电脑, 要打开这个
+    init();
   }
 
   public static void init() {
